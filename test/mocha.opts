@@ -1,0 +1,4 @@
+--require should
+--ui tdd
+--compilers coffee:coffee-script
+--reporter spec
