@@ -3,8 +3,6 @@ fs     = require 'fs'
 
 TSV = require '../index'
 
-console.log(TSV)
-
 tsv_data = fs.readFileSync('./test/test.tsv').toString()
 json_data = JSON.parse(fs.readFileSync('./test/test.json').toString())
 
