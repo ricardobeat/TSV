@@ -1,11 +1,10 @@
 (function(){
 
-    var TSV = {}
-      , sep = "\t"
-      , br  = "\n"
+    var br = "\n"
 
-    TSV.stringify = function (data) {
-        var keys   = Object.keys(data[0])
+    function stringify (data) {
+        var sep    = this.sep
+          , keys   = Object.keys(data[0])
           , header = keys.join(sep)
           , output = header + br
 
@@ -22,8 +21,9 @@
         return !/#@/.test(line[0])
     }
 
-    TSV.parse = function (tsv) {
-        var lines = tsv.split(/[\n\r]/).filter(comments)
+    function parse (tsv) {
+        var sep   = this.sep
+          , lines = tsv.split(/[\n\r]/).filter(comments)
           , keys  = lines.shift().split(sep)
 
         return lines.reduce(function(p, line){
@@ -33,6 +33,24 @@
             }, {}))
             return p
         }, [])
+    }
+
+    var TSV = {
+        stringify: stringify
+      , parse: parse
+      , sep: "\t"
+    }
+
+    // cyclical reference to allow both
+    //   var TSV = require('tsv')
+    // and
+    //   { TSV, CSV } = require('tsv')
+    TSV.TSV = TSV
+
+    TSV.CSV = {
+        stringify: stringify
+      , parse: parse
+      , sep: ","
     }
 
     if (typeof module !== 'undefined' && module.exports){
