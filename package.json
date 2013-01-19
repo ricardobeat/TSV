@@ -1,7 +1,7 @@
 {
   "name": "tsv",
-  "description": "Small sync TSV converter/parser",
-  "version": "0.1.0",
+  "description": "Simple dependency-free TSV and CSV converter/parser",
+  "version": "0.1.1",
   "main": "index.js",
   "keywords": [
     "tsv",
