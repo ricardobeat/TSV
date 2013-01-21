@@ -4,10 +4,12 @@
 
     function stringify (data) {
         var sep    = this.sep
-          , keys   = Object.keys(data[0])
-          , header = keys.join(sep)
+          , keys   = (typeof data[0] === 'object') && Object.keys(data[0])
+          , header = keys && keys.join(sep)
           , output = header + br
 
+        if (!keys) return ''
+            
         return output + data.map(function(obj){
             var values = keys.reduce(function(p, key){
                 p.push(obj[key])
@@ -25,6 +27,8 @@
         var sep   = this.sep
           , lines = tsv.split(/[\n\r]/).filter(comments)
           , keys  = lines.shift().split(sep)
+
+        if (lines.length < 1) return []
 
         return lines.reduce(function(p, line){
             p.push(line.split(sep).reduce(function(p, val, i){

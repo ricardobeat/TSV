@@ -22,3 +22,16 @@ suite 'CSV', ->
 
     test 'CSV to JSON', ->
         assert.deepEqual CSV.parse(csv_data), json_data
+
+suite 'Fail gracefully', ->
+
+    test 'stringify', ->
+        assert.equal TSV.stringify({}), ''
+        assert.equal TSV.stringify([]), ''
+        assert.equal TSV.stringify(Number), ''
+        assert.equal TSV.stringify([1,2,3]), ''
+
+    test 'parse', ->
+        assert.deepEqual TSV.parse(''), []
+        assert.deepEqual TSV.parse('  '), []
+        assert.deepEqual TSV.parse('blah blah'), []
