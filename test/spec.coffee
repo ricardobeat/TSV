@@ -6,6 +6,7 @@ fs     = require 'fs'
 tsv_data = fs.readFileSync('./test/test.tsv').toString()
 csv_data = fs.readFileSync('./test/test.csv').toString()
 json_data = JSON.parse(fs.readFileSync('./test/test.json').toString())
+json_4k = JSON.parse(fs.readFileSync('./test/fb.json').toString())
 
 suite 'TSV', ->
 
@@ -35,3 +36,9 @@ suite 'Fail gracefully', ->
         assert.deepEqual TSV.parse(''), []
         assert.deepEqual TSV.parse('  '), []
         assert.deepEqual TSV.parse('blah blah'), []
+
+suite 'Larger files', ->
+
+    test '4kb', ->
+        tsv_4k = TSV.stringify(json_4k)
+        assert.deepEqual TSV.parse(tsv_4k), json_4k
