@@ -1,12 +1,17 @@
 assert = require 'assert'
 fs     = require 'fs'
 
-{ TSV, CSV } = require '../index'
+tsv = require '../index'
+
+{ TSV, CSV } = tsv
 
 tsv_data = fs.readFileSync('./test/test.tsv').toString()
 csv_data = fs.readFileSync('./test/test.csv').toString()
 json_data = JSON.parse(fs.readFileSync('./test/test.json').toString())
 json_4k = JSON.parse(fs.readFileSync('./test/fb.json').toString())
+
+ssv_data = fs.readFileSync('./test/headerless.ssv').toString()
+json_ssv = JSON.parse(fs.readFileSync('./test/headerless.json').toString())
 
 suite 'TSV', ->
 
@@ -23,6 +28,15 @@ suite 'CSV', ->
 
     test 'CSV to JSON', ->
         assert.deepEqual CSV.parse(csv_data), json_data
+
+suite 'Options', ->
+
+    test 'Star-separated file without header', ->
+        SSV = new TSV.Parser("*", { header: false })
+        assert.deepEqual SSV.parse(ssv_data), json_ssv
+        SSV = new TSV.Parser("*")
+        SSV.header = false
+        assert.deepEqual SSV.parse(SSV.stringify(json_ssv)), json_ssv
 
 suite 'Fail gracefully', ->
 

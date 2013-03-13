@@ -2,21 +2,15 @@
 
     var br = "\n"
 
-    function stringify (data) {
-        var sep    = this.sep
-          , keys   = (typeof data[0] === 'object') && Object.keys(data[0])
-          , header = keys && keys.join(sep)
-          , output = header + br
-
-        if (!keys) return ''
-            
-        return output + data.map(function(obj){
-            var values = keys.reduce(function(p, key){
-                p.push(obj[key])
-                return p
-            }, [])
-            return values.join(sep)
-        }).join(br)
+    function extend (o) {
+        Array.prototype.slice.call(arguments, 1).forEach(function(source){
+            if (!source) return
+            for (var keys = Object.keys(source), i = 0; i < keys.length; i++) {
+                var key = keys[i]
+                o[key] = source[key]
+            }
+        })
+        return o
     }
 
     function unquote (str) {
@@ -28,41 +22,67 @@
         return !/#@/.test(line[0])
     }
 
-    function parse (tsv) {
+    function getValues (line, sep) {
+        return line.split(sep).map(function(value){
+            var value = unquote(value), num = +value
+            return num === parseInt(value, 10) ? num : value
+        })
+    }
+
+    function Parser (sep, options) {
+        var opt = extend({
+            header: true
+        }, options)
+
+        this.sep = sep
+        this.header = opt.header
+    }
+
+    Parser.prototype.stringify = function (data) {
+        var sep    = this.sep
+          , head   = !!this.header
+          , keys   = (typeof data[0] === 'object') && Object.keys(data[0])
+          , header = keys && keys.join(sep)
+          , output = head ? (header + br) : ''
+
+        if (!data || !keys) return ''
+            
+        return output + data.map(function(obj){
+            var item = keys ? {} : []
+            var values = keys.reduce(function(p, key){
+                p.push(obj[key])
+                return p
+            }, [])
+            return values.join(sep)
+        }).join(br)
+    }
+
+    Parser.prototype.parse = function (tsv) {
         var sep   = this.sep
           , lines = tsv.split(/[\n\r]/).filter(comments)
-          , keys  = lines.shift().split(sep)
+          , head  = !!this.header
+          , keys  = head ? getValues(lines.shift(), sep) : {}
 
         if (lines.length < 1) return []
 
-        return lines.reduce(function(p, line){
-            p.push(line.split(sep).reduce(function(p, val, i){
-                val = unquote(val)
-                if (+val === parseInt(val, 10)) val = +val
-                p[keys[i]] = val
-                return p
-            }, {}))
-            return p
+        return lines.reduce(function(output, line){
+            var item = head ? {} : []
+            output.push(getValues(line, sep).reduce(function(item, val, i){
+                item[keys[i] || i] = val
+                return item
+            }, item))
+            return output
         }, [])
     }
 
-    var TSV = {
-        stringify: stringify
-      , parse: parse
-      , sep: "\t"
-    }
+    // Export TSV parser as main, but also expose `.TSV`, `.CSV` and `.Parser`.
+    var TSV = new Parser("\t")
 
-    // cyclical reference to allow both
-    //   var TSV = require('tsv')
-    // and
-    //   { TSV, CSV } = require('tsv')
-    TSV.TSV = TSV
-
-    TSV.CSV = {
-        stringify: stringify
-      , parse: parse
-      , sep: ","
-    }
+    extend(TSV, {
+        TSV    : TSV
+      , CSV    : new Parser(",")
+      , Parser : Parser
+    })
 
     if (typeof module !== 'undefined' && module.exports){
         module.exports = TSV

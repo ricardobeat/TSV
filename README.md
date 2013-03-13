@@ -35,3 +35,23 @@ Outputs
 - `TSV.parse(tsv_string)`
 - `CSV.stringify(object)`
 - `CSV.parse(csv_string)`
+
+#### Options and custom separators
+
+No headers:
+
+    // Creating a new parser
+    var Parser = require('tsv').Parser
+    var CSV = new Parser(",", { header: false })
+
+    // Using the default parser
+    var CSV = require('tsv').CSV
+    CSV.header = false
+
+Custom "pipe-separated values":
+
+    var TSV = require('tsv')
+    PSV = new TSV.Parser("|")
+
+    var res = PSV.parse(...)
+    
