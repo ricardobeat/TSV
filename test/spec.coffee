@@ -11,7 +11,7 @@ json_4k = JSON.parse(fs.readFileSync('./test/fb.json').toString())
 suite 'TSV', ->
 
     test 'JSON to TSV', ->
-        assert.equal TSV.stringify(json_data), tsv_data
+        assert.deepEqual TSV.parse(TSV.stringify(json_data)), json_data
 
     test 'TSV to JSON', ->
         assert.deepEqual TSV.parse(tsv_data), json_data
@@ -19,7 +19,7 @@ suite 'TSV', ->
 suite 'CSV', ->
 
     test 'JSON to CSV', ->
-        assert.equal CSV.stringify(json_data), csv_data
+        assert.deepEqual CSV.parse(CSV.stringify(json_data)), json_data
 
     test 'CSV to JSON', ->
         assert.deepEqual CSV.parse(csv_data), json_data
@@ -41,4 +41,4 @@ suite 'Larger files', ->
 
     test '4kb', ->
         tsv_4k = TSV.stringify(json_4k)
-        assert.deepEqual TSV.parse(tsv_4k), json_4k
+        assert.equal JSON.stringify(TSV.parse(tsv_4k)), JSON.stringify(json_4k)

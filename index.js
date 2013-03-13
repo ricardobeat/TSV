@@ -19,6 +19,11 @@
         }).join(br)
     }
 
+    function unquote (str) {
+        var match
+        return (match = str.match(/(['"]?)(.*)\1/)) && match[2] || str
+    }
+
     function comments (line) {
         return !/#@/.test(line[0])
     }
@@ -32,6 +37,8 @@
 
         return lines.reduce(function(p, line){
             p.push(line.split(sep).reduce(function(p, val, i){
+                val = unquote(val)
+                if (+val === parseInt(val, 10)) val = +val
                 p[keys[i]] = val
                 return p
             }, {}))

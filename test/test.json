@@ -21,4 +21,10 @@
     "food": "turnip",
     "type": "bad",
     "source": "earth"
+},
+{
+    "id": 90,
+    "food": "raw meat",
+    "type": "noquotes",
+    "source": "  spaces "
 }]
