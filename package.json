@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "flour": "",
-    "mocha": ""
+    "mocha": "",
+    "coffee-script": ""
   },
   "scripts": {
     "test": "mocha"
