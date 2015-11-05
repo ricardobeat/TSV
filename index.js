@@ -25,7 +25,7 @@
     function getValues (line, sep) {
         return line.split(sep).map(function(value){
             var value = unquote(value), num = +value
-            return num === parseInt(value, 10) ? num : value
+            return (num === parseInt(value, 10) || num === parseFloat(value)) ? num : value
         })
     }
 
