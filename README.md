@@ -14,7 +14,7 @@ tool like [node-csv-parser](http://npmjs.org/node-csv-parser).*
 ### Usage
 
     var csv = require('csv')
-    var tsv = require('xsv').tsv
+    var tsv = require('tsv');
     { tsv, csv } = require 'xsv' // coffeescript
 
 The `data` argument for stringify must be a flat array of objects. Keys will be derived from the first item.
