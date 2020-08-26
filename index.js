@@ -25,8 +25,8 @@
     function getValues (line, sep) {
         return line.split(sep).map(function(value){
             var value = unquote(value);
-            var numeric = +value;
-            return (numeric === numeric) ? numeric : value; // take advantage of NaN !== NaN
+            var num = +value;
+            return (num.toString() === value) ? num : value; // take advantage of NaN !== NaN
         })
     }
 
