@@ -13,12 +13,11 @@
     "delimited",
     "d3"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "flour": "",
-    "mocha": "",
-    "coffee-script": ""
+    "flour": "0.5.8",
+    "mocha": "2.5.3",
+    "coffee-script": "1.9.0"
   },
   "scripts": {
     "test": "mocha"
