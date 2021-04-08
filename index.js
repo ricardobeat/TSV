@@ -60,7 +60,7 @@
 
     Parser.prototype.parse = function (tsv) {
         var sep   = this.sep
-          , lines = tsv.split(/[\n\r]/).filter(comments)
+          , lines = tsv.split(/(\r\n|[\r\n])/).filter(comments)
           , head  = !!this.header
           , keys  = head ? getValues(lines.shift(), sep) : {}
 
